@@ -1,6 +1,6 @@
 require "middleman-core"
 
-Middleman::Extensions.register :middleman-bower do
-  require "my-extension/extension"
+Middleman::Extensions.register :bower do
+  require "middleman-bower/extension"
   MyExtension
 end
