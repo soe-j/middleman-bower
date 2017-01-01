@@ -14,6 +14,7 @@ class MyExtension < ::Middleman::Extension
 
     # set up your extension
     # puts options.my_option
+    @app = app
   end
 
   def after_configuration
@@ -21,8 +22,16 @@ class MyExtension < ::Middleman::Extension
   end
 
   # A Sitemap Manipulator
-  # def manipulate_resource_list(resources)
-  # end
+  def manipulate_resource_list(resources)
+    components_basepath = 'javascripts'
+
+    bower_resources = Dir.glob('./tmp/bower_components/**/*.js').map do |filepath|
+      fullpath = File.expand_path(filepath, @app.root)
+      Middleman::Sitemap::Resource.new(@app.sitemap, "#{components_basepath}/#{filepath[23..-1]}", fullpath)
+    end
+
+    resources + bower_resources
+  end
 
   # helpers do
   #   def a_helper
