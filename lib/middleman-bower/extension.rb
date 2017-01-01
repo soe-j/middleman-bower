@@ -17,6 +17,24 @@ class MyExtension < ::Middleman::Extension
     @app = app
   end
 
+  helpers do
+    def bower_javascripts_include_tag options={}
+      components_basepath = 'javascripts'
+
+      paths = Dir.glob('./tmp/bower_components/**/*.js')
+      if options[:priorities]
+        options[:priorities].reverse.each do |priority_js|
+          paths.sort_by! do |path|
+            path.include?("#{priority_js}.js") ? 0 : 1
+          end
+        end
+      end
+      paths.map do |path|
+        content_tag :script, nil, {src: "#{components_basepath}/#{path[23..-1]}"}
+      end.join
+    end
+  end
+
   def after_configuration
     # Do something
   end
