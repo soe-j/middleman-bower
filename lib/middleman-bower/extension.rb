@@ -15,6 +15,13 @@ class MyExtension < ::Middleman::Extension
     # set up your extension
     # puts options.my_option
     @app = app
+
+    gruntfile_path = File.expand_path('../../../Gruntfile.js', __FILE__)
+
+    @app.activate :external_pipeline,
+      name: :bower,
+      command: "grunt bower:install --gruntfile #{gruntfile_path} --base #{@app.root}",
+      source: "#{@app.root}/tmp/bower_components"
   end
 
   helpers do
